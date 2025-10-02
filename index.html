@@ -115,12 +115,12 @@
      class="md:hidden hidden absolute top-16 left-0 w-full bg-[#191970] shadow-md z-50 transition-all duration-300 ease-in-out">
     <div class="px-4 py-4 space-y-2">
         <a href="#" onclick="toggleMobileMenu()" class="block text-white hover:text-fuchsia-300">Home</a>
-        <a href="#Why" onclick="toggleMobileMenu()" class="block text-white hover:text-fuchsia-300">Why Choose Us</a>
-        <a href="#courses" onclick="toggleMobileMenu()" class="block text-white hover:text-fuchsia-300">Courses</a>
-        <a href="#story" onclick="toggleMobileMenu()" class="block text-white hover:text-fuchsia-300">Story</a>
-        <a href="#about" onclick="toggleMobileMenu()" class="block text-white hover:text-fuchsia-300">About</a>
-        <a href="#contact" onclick="toggleMobileMenu()" class="block text-white hover:text-fuchsia-300">Contact</a>
-        <a href="#" onclick="toggleMobileMenu()" 
+        <a href="#Why" onclick="navigateToSection(event, 'Why')" class="block text-white hover:text-fuchsia-300">Why Choose Us</a>
+        <a href="#courses" onclick="navigateToSection(event, 'courses')" class="block text-white hover:text-fuchsia-300">Courses</a>
+        <a href="#story" onclick="navigateToSection(event, 'story')" class="block text-white hover:text-fuchsia-300">Story</a>
+        <a href="#about" onclick="navigateToSection(event, 'about')" class="block text-white hover:text-fuchsia-300">About</a>
+        <a href="#contact" onclick="navigateToSection(event, 'contact')" class="block text-white hover:text-fuchsia-300">Contact</a>
+        <a href="#" onclick="navigateToSection(event, 'about')" 
            class="block w-full text-center px-4 py-2 mt-2 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-700 button-effect">
             Login
         </a>
@@ -423,11 +423,23 @@
             easing: 'ease-in-out',
         });
     </script>
+    
     <script>
     function toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         menu.classList.toggle('hidden');
     }
+
+function navigateToSection(event, id) {
+    event.preventDefault(); // stop default jump
+    toggleMobileMenu();     // close the menu
+
+    // smooth scroll to section
+    document.getElementById(id).scrollIntoView({ 
+        behavior: "smooth",
+        block: "start"
+    });
+}
 </script>
 
 </body>
