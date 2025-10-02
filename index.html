@@ -93,7 +93,7 @@
                 <div class="flex items-center">
                     <a href="#" class="text-2xl font-bold text-fuchsia-600 logo-glow-effect">Karma Judiciary</a>
                 </div>
-                <div class="hidden md:flex items-center space-x-8">
+                <div id="mobile-menu" class="hidden md:flex md:items-center md:space-x-8 absolute md:relative top-16 left-0 bg-white w-full shadow-md md:shadow-none md:w-auto md:bg-transparent flex-col md:flex-row items-start md:items-center p-4 md:p-0">    
                     <a href="#" class="nav-link text-gray-700 hover:text-fuchsia-600">Home</a>
                     <a href="#Why" class="nav-link text-gray-700 hover:text-fuchsia-600">Why Choose Us</a>
                     <a href="#courses" class="nav-link text-gray-700 hover:text-fuchsia-600">Courses</a> 
@@ -401,6 +401,16 @@
             easing: 'ease-in-out',
         });
     </script>
+                    <script>
+    // JavaScript for the Mobile Menu
+    const menuButton = document.getElementById('menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    menuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>
 </body>
 
 </html>
+
