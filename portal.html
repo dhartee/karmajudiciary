@@ -36,6 +36,7 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i data-feather="smartphone" class="h-5 w-5 text-gray-400"></i></div>
                             <input type="text" id="mobile-input" placeholder="Enter a 10-digit number" class="w-full pl-10 pr-4 py-3 bg-gray-100 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" required>
                         </div>
+                        
                         <p id="login-error" class="text-red-500 text-sm mt-2 hidden"></p>
                         <div id="recaptcha-container" class="mt-4"></div>
                         <button type="submit" class="w-full mt-4 px-6 py-3 text-lg font-bold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 focus:outline-none focus:ring-4 focus:ring-fuchsia-300 button-effect">
@@ -145,7 +146,10 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // --- IMPORTANT: PASTE YOUR FIREBASE CONFIGURATION HERE ---
+     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
         const firebaseConfig = {
             apiKey: "AIzaSyBmgAPygSDfVF1nvyNknjNHfS2dWN6kfsM",
     authDomain: "newportal-c494f.firebaseapp.com",
@@ -421,3 +425,4 @@
     </script>
 </body>
 </html>
+
