@@ -243,7 +243,9 @@
                     otpStep.classList.remove('hidden');
                     loginError.textContent = `OTP sent to ${phoneNumber}`;
                     loginError.classList.remove('hidden');
-                    otpInput.focus();
+                    setTimeout(() => {
+                        otpInput.focus();
+                    }, 0);
                 }).catch((error) => {
                     console.error("SMS not sent error", error);
                     loginError.textContent = 'Error sending OTP. Please try again.';
@@ -423,6 +425,7 @@
     </script>
 </body>
 </html>
+
 
 
 
