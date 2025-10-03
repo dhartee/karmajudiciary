@@ -30,17 +30,26 @@
                 <h2 class="text-2xl font-bold text-gray-800 text-center mb-1">Welcome!</h2>
                 <p class="text-center text-gray-500 mb-6">Enter your mobile number to begin.</p>
                 <form id="login-form">
-                    <div class="mb-4">
-                        <label for="student-test-name" class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                    <div id="mobile-step">
+                        <label for="mobile-input" class="block text-sm font-medium text-gray-700 mb-1">Mobile Number (+91)</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i data-feather="smartphone" class="h-5 w-5 text-gray-400"></i></div>
                             <input type="text" id="mobile-input" placeholder="Enter a 10-digit number" class="w-full pl-10 pr-4 py-3 bg-gray-100 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" required>
                         </div>
-                         <p id="login-error" class="text-red-500 text-sm mt-2 hidden">Please enter a valid 10-digit number.</p>
+                        <p id="login-error" class="text-red-500 text-sm mt-2 hidden"></p>
+                        <div id="recaptcha-container" class="mt-4"></div>
+                        <button type="submit" class="w-full mt-4 px-6 py-3 text-lg font-bold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 focus:outline-none focus:ring-4 focus:ring-fuchsia-300 button-effect">
+                            Send OTP
+                        </button>
                     </div>
-                    <button type="submit" class="w-full mt-4 px-6 py-3 text-lg font-bold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 focus:outline-none focus:ring-4 focus:ring-fuchsia-300 button-effect">
-                        Login / Register
-                    </button>
+                    
+                    <div id="otp-step" class="hidden">
+                         <label for="otp-input" class="block text-sm font-medium text-gray-700 mb-1">Enter OTP</label>
+                         <input type="text" id="otp-input" placeholder="Enter 6-digit code" class="w-full text-center tracking-widest text-xl py-3 bg-gray-100 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" required>
+                         <button type="button" id="verify-otp-btn" class="w-full mt-4 px-6 py-3 text-lg font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 button-effect">
+                            Verify & Login
+                        </button>
+                    </div>
                 </form>
                  <p class="text-xs text-gray-500 mt-6 text-center">
                     (Use <code class="bg-gray-200 px-1 rounded">9999999999</code> for Teacher login, any other 10-digit number for Student.)
@@ -65,29 +74,22 @@
                 <div class="bg-white p-8 rounded-2xl shadow-lg">
                     <h3 class="text-xl font-bold text-fuchsia-600 mb-4 flex items-center"><i data-feather="upload-cloud" class="mr-2"></i>Upload Your Test Copy</h3>
                     <p class="text-gray-600 mb-6">Please upload your completed test copy in PDF format only.</p>
-                  <form>
-    <div class="mb-4">
-        <label for="student-test-name" class="block text-sm font-medium text-gray-700 mb-1">Test Name / Subject</label>
-        <input type="text" id="student-test-name" name="testName" placeholder="e.g., IPC Section 1-50 Test" class="w-full px-4 py-2 bg-gray-100 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
-    </div>
-    <div class="mb-4">
-        <label for="student-file-upload" class="block text-sm font-medium text-gray-700 mb-1">Select PDF File</label>
-        <input type="file" id="student-file-upload" name="testCopy" accept=".pdf" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-fuchsia-50 file:text-fuchsia-700 hover:file:bg-fuchsia-100">
-    </div>
-    <button type="submit" class="w-full mt-4 py-3 font-bold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 button-effect-sm">Submit Copy</button>
-</form>
+                    <form id="student-upload-form">
+                        <div class="mb-4">
+                            <label for="student-test-name" class="block text-sm font-medium text-gray-700 mb-1">Test Name / Subject</label>
+                            <input type="text" id="student-test-name" name="testName" placeholder="e.g., IPC Section 1-50 Test" class="w-full px-4 py-2 bg-gray-100 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="student-file-upload" class="block text-sm font-medium text-gray-700 mb-1">Select PDF File</label>
+                            <input type="file" id="student-file-upload" name="testCopy" accept=".pdf" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-fuchsia-50 file:text-fuchsia-700 hover:file:bg-fuchsia-100" required>
+                        </div>
+                        <button type="submit" class="w-full mt-4 py-3 font-bold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 button-effect-sm">Submit Copy</button>
+                    </form>
                 </div>
                 <div class="bg-white p-8 rounded-2xl shadow-lg">
-                    <h3 class="text-xl font-bold text-orange-500 mb-4 flex items-center"><i data-feather="file-text" class="mr-2"></i>Your Reviewed Copies</h3>
-                    <div class="space-y-4">
-                        <div class="border p-4 rounded-lg flex justify-between items-center">
-                            <div><p class="font-semibold text-gray-800">CrPC Mock Test - 01</p><p class="text-sm text-gray-500">Reviewed on: 02 Oct, 2025</p></div>
-                            <a href="#" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 button-effect-sm flex items-center"><i data-feather="download" class="w-4 h-4 mr-2"></i> View</a>
-                        </div>
-                        <div class="border p-4 rounded-lg flex justify-between items-center bg-gray-50 opacity-70">
-                            <div><p class="font-semibold text-gray-800">IPC Section 1-50 Test</p><p class="text-sm text-gray-500">Status: Pending Review</p></div>
-                            <span class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-200 rounded-lg cursor-not-allowed">Pending</span>
-                        </div>
+                    <h3 class="text-xl font-bold text-orange-500 mb-4 flex items-center"><i data-feather="file-text" class="mr-2"></i>Your Submissions</h3>
+                    <div id="student-submissions-list" class="space-y-4">
+                        <p class="text-gray-500">Your submitted and reviewed copies will appear here.</p>
                     </div>
                 </div>
             </div>
@@ -112,19 +114,18 @@
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
                             <thead><tr class="border-b"><th class="py-2">Student Mobile</th><th class="py-2">Test Name</th><th class="py-2">Action</th></tr></thead>
-                            <tbody class="text-gray-700">
-                                <tr><td class="py-3">8959317485</td><td class="py-3">IPC Section 1-50 Test</td><td class="py-3"><a href="#" class="px-3 py-1 text-sm text-white bg-fuchsia-600 rounded-full hover:bg-fuchsia-700">Download</a></td></tr>
-                                <tr><td class="py-3">9876543210</td><td class="py-3">CrPC Mock Test - 02</td><td class="py-3"><a href="#" class="px-3 py-1 text-sm text-white bg-fuchsia-600 rounded-full hover:bg-fuchsia-700">Download</a></td></tr>
-                            </tbody>
+                            <tbody id="teacher-pending-list" class="text-gray-700">
+                                </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
                     <h3 class="text-xl font-bold text-fuchsia-600 mb-4">Upload Reviewed Copy</h3>
-                    <form>
+                    <form id="teacher-upload-form">
                         <div class="mb-4">
                             <label for="teacher-student-mobile" class="block text-sm font-medium text-gray-700 mb-1">Student's Mobile Number</label>
-                            <input type="tel" id="teacher-student-mobile" placeholder="Enter student's 10-digit number" class="w-full px-4 py-2 bg-gray-100 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" required>
+                            <input type="text" id="teacher-student-mobile" placeholder="e.g. 8959317485" class="w-full px-4 py-2 bg-gray-100 border-2 border-transparent rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" readonly>
+                             <input type="hidden" id="submission-id">
                         </div>
                         <div class="mb-4">
                             <label for="teacher-file-upload" class="block text-sm font-medium text-gray-700 mb-1">Select Checked PDF File</label>
@@ -137,9 +138,30 @@
         </main>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // --- IMPORTANT: PASTE YOUR FIREBASE CONFIGURATION HERE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBmgAPygSDfVF1nvyNknjNHfS2dWN6kfsM",
+    authDomain: "newportal-c494f.firebaseapp.com",
+    projectId: "newportal-c494f",
+    storageBucket: "newportal-c494f.firebasestorage.app",
+    messagingSenderId: "168686671259",
+    appId: "1:168686671259:web:8a793a307b8b6d056e7d3e",
+    measurementId: "G-36FNJC6M71"
+  };
+
+        // --- Initialize Firebase and Services ---
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        
         // --- Initialize Feather Icons and AOS Animation ---
         feather.replace();
         AOS.init({ once: true, duration: 800 });
@@ -151,14 +173,23 @@
         
         const loginForm = document.getElementById('login-form');
         const mobileInput = document.getElementById('mobile-input');
+        const otpInput = document.getElementById('otp-input');
         const loginError = document.getElementById('login-error');
+        const mobileStep = document.getElementById('mobile-step');
+        const otpStep = document.getElementById('otp-step');
+        const verifyOtpBtn = document.getElementById('verify-otp-btn');
         
         const studentMobileDisplay = document.getElementById('student-mobile-display');
-        const studentUploadForm = document.querySelector('#student-view form'); // Get the student upload form
-        const logoutButtons = document.querySelectorAll('.logout-btn');
+        const studentUploadForm = document.getElementById('student-upload-form');
+        const studentSubmissionsList = document.getElementById('student-submissions-list');
+        
+        const teacherPendingList = document.getElementById('teacher-pending-list');
+        const teacherUploadForm = document.getElementById('teacher-upload-form');
+        const teacherStudentMobileInput = document.getElementById('teacher-student-mobile');
+        const teacherSubmissionIdInput = document.getElementById('submission-id');
 
+        const logoutButtons = document.querySelectorAll('.logout-btn');
         const allViews = [loginView, studentView, teacherView];
-        const API_URL = 'https://karmajudiciary.onrender.com'; // Your backend server URL
 
         // --- Core View Switching Function ---
         function showView(viewId) {
@@ -166,12 +197,36 @@
             const activeView = document.getElementById(viewId);
             if (activeView) activeView.classList.remove('hidden');
         }
+        
+        // --- Check auth state on page load ---
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is signed in.
+                if (user.phoneNumber === '+919999999999') {
+                    showView('teacher-view');
+                    loadTeacherDashboard();
+                } else {
+                    studentMobileDisplay.textContent = user.phoneNumber;
+                    showView('student-view');
+                    loadStudentDashboard(user.uid);
+                }
+            } else {
+                // User is signed out.
+                showView('login-view');
+            }
+        });
 
-        // --- Event Listener for Login Form ---
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
+
+        // --- LOGIN LOGIC ---
+        // 1. Setup reCAPTCHA
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible'
+        });
+
+        // 2. Handle Login Form Submission (Send OTP)
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
             const mobileNumber = mobileInput.value;
-
             if (mobileNumber.length !== 10 || !/^\d+$/.test(mobileNumber)) {
                 loginError.textContent = 'Please enter a valid 10-digit number.';
                 loginError.classList.remove('hidden');
@@ -179,85 +234,190 @@
             }
             loginError.classList.add('hidden');
 
-            try {
-                const response = await fetch(`${API_URL}/api/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mobileNumber: mobileNumber })
+            const phoneNumber = `+91${mobileNumber}`;
+            auth.signInWithPhoneNumber(phoneNumber, window.recaptchaVerifier)
+                .then((confirmationResult) => {
+                    window.confirmationResult = confirmationResult;
+                    mobileStep.classList.add('hidden');
+                    otpStep.classList.remove('hidden');
+                    loginError.textContent = `OTP sent to ${phoneNumber}`;
+                    loginError.classList.remove('hidden');
+                }).catch((error) => {
+                    console.error("SMS not sent error", error);
+                    loginError.textContent = 'Error sending OTP. Please try again.';
+                    loginError.classList.remove('hidden');
+                    recaptchaVerifier.render().then(widgetId => recaptchaVerifier.reset(widgetId));
                 });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'Login failed.');
-                }
-
-                const data = await response.json();
-                
-                // **Store the token for future requests**
-                localStorage.setItem('token', data.token);
-
-                // **Show the correct view based on the role from the server**
-                if (data.user.role === 'teacher') {
-                    showView('teacher-view');
-                } else {
-                    studentMobileDisplay.textContent = data.user.mobileNumber;
-                    showView('student-view');
-                }
-
-            } catch (error) {
-                loginError.textContent = error.message;
-                loginError.classList.remove('hidden');
-            }
         });
 
-        // --- Event Listener for Student File Upload ---
-        studentUploadForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const token = localStorage.getItem('token');
-            if (!token) {
+        // 3. Handle OTP Verification
+        verifyOtpBtn.addEventListener('click', () => {
+            const code = otpInput.value;
+            if (!code || code.length !== 6) {
+                loginError.textContent = 'Please enter a valid 6-digit OTP.';
+                return;
+            }
+            window.confirmationResult.confirm(code).then((result) => {
+                // User signed in successfully. The onAuthStateChanged observer will handle the view change.
+                const user = result.user;
+                console.log("User logged in:", user.phoneNumber);
+            }).catch((error) => {
+                console.error("OTP verification error", error);
+                loginError.textContent = 'Invalid OTP. Please try again.';
+            });
+        });
+
+        // --- STUDENT LOGIC ---
+        // 1. Upload Test Copy
+        studentUploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            if (!user) {
                 alert('You are not logged in!');
-                showView('login-view');
                 return;
             }
 
-            // Use FormData to send files and text fields together
-            const formData = new FormData(event.target);
-
-            try {
-                const response = await fetch(`${API_URL}/api/submissions`, {
-                    method: 'POST',
-                    headers: {
-                        // **Include the token for authentication**
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'File upload failed.');
-                }
-
-                alert('File uploaded successfully!');
-                event.target.reset(); // Clear the form
-                // You could also add logic here to refresh the list of submissions
-
-            } catch (error) {
-                alert(`Error: ${error.message}`);
+            const testName = e.target.testName.value;
+            const file = e.target.testCopy.files[0];
+            if (!file) {
+                alert('Please select a file.');
+                return;
             }
+
+            const filePath = `submissions/${user.uid}/${Date.now()}_${file.name}`;
+            const fileRef = storage.ref(filePath);
+            const uploadTask = fileRef.put(file);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => { /* Can be used for upload progress */ },
+                (error) => { console.error(error); alert('Upload failed!'); },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        db.collection('submissions').add({
+                            studentId: user.uid,
+                            studentMobile: user.phoneNumber,
+                            testName: testName,
+                            originalFileUrl: downloadURL,
+                            status: 'pending',
+                            submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            alert('File uploaded successfully!');
+                            studentUploadForm.reset();
+                        }).catch(err => {
+                            console.error(err);
+                            alert('Failed to save submission data.');
+                        });
+                    });
+                }
+            );
+        });
+        
+        // 2. Load Student's Submissions
+        function loadStudentDashboard(userId) {
+            db.collection('submissions').where('studentId', '==', userId).orderBy('submittedAt', 'desc')
+            .onSnapshot(querySnapshot => {
+                studentSubmissionsList.innerHTML = ''; // Clear list
+                if (querySnapshot.empty) {
+                     studentSubmissionsList.innerHTML = '<p class="text-gray-500">No submissions yet.</p>';
+                     return;
+                }
+                querySnapshot.forEach(doc => {
+                    const sub = doc.data();
+                    const submissionDate = sub.submittedAt ? sub.submittedAt.toDate().toLocaleDateString() : 'N/A';
+                    let html = '';
+                    if (sub.status === 'pending') {
+                         html = `
+                            <div class="border p-4 rounded-lg flex justify-between items-center bg-gray-50 opacity-70">
+                                <div><p class="font-semibold text-gray-800">${sub.testName}</p><p class="text-sm text-gray-500">Submitted on: ${submissionDate}</p></div>
+                                <span class="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-200 rounded-lg cursor-not-allowed">Pending</span>
+                            </div>`;
+                    } else { // status is 'reviewed'
+                        const reviewedDate = sub.reviewedAt ? sub.reviewedAt.toDate().toLocaleDateString() : 'N/A';
+                         html = `
+                            <div class="border p-4 rounded-lg flex justify-between items-center">
+                                <div><p class="font-semibold text-gray-800">${sub.testName}</p><p class="text-sm text-gray-500">Reviewed on: ${reviewedDate}</p></div>
+                                <a href="${sub.reviewedFileUrl}" target="_blank" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 button-effect-sm flex items-center"><i data-feather="download" class="w-4 h-4 mr-2"></i> View</a>
+                            </div>`;
+                    }
+                    studentSubmissionsList.innerHTML += html;
+                });
+                feather.replace(); // Re-render icons
+            });
+        }
+
+        // --- TEACHER LOGIC ---
+        // 1. Load Pending Submissions
+        function loadTeacherDashboard() {
+            db.collection('submissions').where('status', '==', 'pending').orderBy('submittedAt', 'asc')
+            .onSnapshot(querySnapshot => {
+                teacherPendingList.innerHTML = '';
+                 if (querySnapshot.empty) {
+                     teacherPendingList.innerHTML = '<tr><td colspan="3" class="py-3 text-center text-gray-500">No pending submissions.</td></tr>';
+                     return;
+                }
+                querySnapshot.forEach(doc => {
+                    const sub = doc.data();
+                    const row = `
+                        <tr>
+                            <td class="py-3">${sub.studentMobile}</td>
+                            <td class="py-3">${sub.testName}</td>
+                            <td class="py-3">
+                                <a href="${sub.originalFileUrl}" target="_blank" class="px-3 py-1 text-sm text-white bg-blue-600 rounded-full hover:bg-blue-700 mr-2">Download</a>
+                                <button onclick="selectForReview('${doc.id}', '${sub.studentMobile}')" class="px-3 py-1 text-sm text-white bg-fuchsia-600 rounded-full hover:bg-fuchsia-700">Upload Review</button>
+                            </td>
+                        </tr>`;
+                    teacherPendingList.innerHTML += row;
+                });
+            });
+        }
+        
+        // 2. Function to populate the upload form
+        function selectForReview(submissionId, studentMobile) {
+            teacherSubmissionIdInput.value = submissionId;
+            teacherStudentMobileInput.value = studentMobile;
+            teacherUploadForm.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 3. Upload Reviewed Copy
+        teacherUploadForm.addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const submissionId = teacherSubmissionIdInput.value;
+            const file = e.target.querySelector('input[type=file]').files[0];
+
+            if (!submissionId) { alert('Please select a submission to review first.'); return; }
+            if (!file) { alert('Please select a reviewed file to upload.'); return; }
+
+            const filePath = `reviewed/${submissionId}/${file.name}`;
+            const fileRef = storage.ref(filePath);
+            const uploadTask = fileRef.put(file);
+
+            uploadTask.on('state_changed', null, 
+                (error) => { console.error(error); alert('Upload failed!'); },
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        db.collection('submissions').doc(submissionId).update({
+                            reviewedFileUrl: downloadURL,
+                            status: 'reviewed',
+                            reviewedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            alert('Reviewed copy uploaded successfully!');
+                            teacherUploadForm.reset();
+                            teacherSubmissionIdInput.value = '';
+                        }).catch(err => {
+                             console.error(err);
+                             alert('Failed to update submission data.');
+                        });
+                    });
+                }
+            );
         });
 
-        // --- Event Listener for Logout Buttons ---
+        // --- LOGOUT LOGIC ---
         logoutButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // **Clear the token on logout**
-                localStorage.removeItem('token');
-                mobileInput.value = '';
-                showView('login-view');
+                auth.signOut();
             });
         });
     </script>
-</body>
-</html>
 </body>
 </html>
