@@ -27,12 +27,12 @@
                     <a href="#" class="text-2xl font-bold text-fuchsia-600 logo-glow-effect">Karma Judiciary</a>
                 </div>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="nav-link text-gray-700 hover:text-fuchsia-600">Home</a>
-                    <a href="#Why" class="nav-link text-gray-700 hover:text-fuchsia-600">Why Choose Us</a>
-                    <a href="#courses" class="nav-link text-gray-700 hover:text-fuchsia-600">Courses</a> 
-                    <a href="#story" class="nav-link text-gray-700 hover:text-fuchsia-600">Story</a>
-                    <a href="#about" class="nav-link text-gray-700 hover:text-fuchsia-600">About</a>
-                    <a href="#contact" class="nav-link text-gray-700 hover:text-fuchsia-600">Contact</a>
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-fuchsia-600">Home</a>
+                    <a href="index.html#Why" class="nav-link text-gray-700 hover:text-fuchsia-600">Why Choose Us</a>
+                    <a href="index.html#courses" class="nav-link text-gray-700 hover:text-fuchsia-600">Courses</a> 
+                    <a href="index.html#story" class="nav-link text-gray-700 hover:text-fuchsia-600">Story</a>
+                    <a href="index.html#about" class="nav-link text-gray-700 hover:text-fuchsia-600">About</a>
+                    <a href="index.html#contact" class="nav-link text-gray-700 hover:text-fuchsia-600">Contact</a>
                     <a href="portal.html" class="px-4 py-2 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-700 button-effect">
                         Login
                     </a>
@@ -464,8 +464,26 @@
             });
         });
     </script>
+        <script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        menu.classList.toggle('hidden');
+    }
+
+function navigateToSection(event, id) {
+    event.preventDefault(); // stop default jump
+    toggleMobileMenu();     // close the menu
+
+    // smooth scroll to section
+    document.getElementById(id).scrollIntoView({ 
+        behavior: "smooth",
+        block: "start"
+    });
+}
+</script>
 </body>
 </html>
+
 
 
 
