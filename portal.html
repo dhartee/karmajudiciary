@@ -20,7 +20,47 @@
     </style>
 </head>
 <body class="bg-gray-50">
+ <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold text-fuchsia-600 logo-glow-effect">Karma Judiciary</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="nav-link text-gray-700 hover:text-fuchsia-600">Home</a>
+                    <a href="#Why" class="nav-link text-gray-700 hover:text-fuchsia-600">Why Choose Us</a>
+                    <a href="#courses" class="nav-link text-gray-700 hover:text-fuchsia-600">Courses</a> 
+                    <a href="#story" class="nav-link text-gray-700 hover:text-fuchsia-600">Story</a>
+                    <a href="#about" class="nav-link text-gray-700 hover:text-fuchsia-600">About</a>
+                    <a href="#contact" class="nav-link text-gray-700 hover:text-fuchsia-600">Contact</a>
+                    <a href="portal.html" class="px-4 py-2 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-700 button-effect">
+                        Login
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center">
+    <button id="menuToggleBtn" class="text-gray-700" onclick="toggleMobileMenu()">
+        <i data-feather="menu"></i>
+    </button>
+</div>
 
+                <!-- Mobile Menu (Hidden by default) -->
+<div id="mobileMenu" 
+     class="md:hidden hidden absolute top-16 left-0 w-full bg-[#191970] shadow-md z-50 transition-all duration-300 ease-in-out">
+    <div class="px-4 py-4 space-y-2">
+        <a href="#" onclick="toggleMobileMenu()" class="block text-white hover:text-fuchsia-300">Home</a>
+        <a href="#Why" onclick="navigateToSection(event, 'Why')" class="block text-white hover:text-fuchsia-300">Why Choose Us</a>
+        <a href="#courses" onclick="navigateToSection(event, 'courses')" class="block text-white hover:text-fuchsia-300">Courses</a>
+        <a href="#story" onclick="navigateToSection(event, 'story')" class="block text-white hover:text-fuchsia-300">Story</a>
+        <a href="#about" onclick="navigateToSection(event, 'about')" class="block text-white hover:text-fuchsia-300">About</a>
+        <a href="#contact" onclick="navigateToSection(event, 'contact')" class="block text-white hover:text-fuchsia-300">Contact</a>
+        <a href="portal.html" class="block w-full text-center px-4 py-2 mt-2 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-700 button-effect">
+            Login
+        </a>
+    </div>
+</div>
+            </div>
+        </div>
+    </nav>
     <div id="login-view" class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-fuchsia-50 via-white to-orange-50">
         <div class="max-w-md w-full" data-aos="fade-up">
             <div class="text-center mb-8">
@@ -426,6 +466,7 @@
     </script>
 </body>
 </html>
+
 
 
 
