@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post - Karma Judiciary Indore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .prose { max-width: 80ch; }
+        .prose h1, .prose h2, .prose h3 { font-weight: 700; }
+        .prose p { font-size: 1.125rem; line-height: 1.75; margin-bottom: 1.5rem; color: #374151; }
+        .prose a { color: #d946ef; text-decoration: underline; }
+        
+        .button-effect:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 10px 20px rgba(217, 70, 239, 0.4); }
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 50%; transform: translateX(-50%); background-color: #ec4899; transition: width 0.3s ease; }
+        .nav-link:hover::after { width: 100%; }
+        footer a:hover { color: #f97316; }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Reusable Navigation Bar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="text-2xl font-bold text-fuchsia-600">Karma Judiciary</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-fuchsia-600">Home</a>
+                    <a href="courses.html" class="nav-link text-gray-700 hover:text-fuchsia-600">Courses</a>
+                    <a href="blog.html" class="nav-link text-gray-700 hover:text-fuchsia-600">Blog</a>
+                    <a href="contact.html" class="nav-link text-gray-700 hover:text-fuchsia-600">Contact</a>
+                    <a href="portal.html" class="px-4 py-2 rounded-full bg-orange-500 text-white hover:bg-orange-600 button-effect">Login</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menuToggleBtn" class="text-gray-700"><i data-feather="menu"></i></button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden absolute top-16 left-0 w-full bg-white shadow-md z-50">
+            <div class="px-4 py-4 space-y-2">
+                <a href="index.html" class="block text-gray-700 hover:text-fuchsia-600">Home</a>
+                <a href="courses.html" class="block text-gray-700 hover:text-fuchsia-600">Courses</a>
+                <a href="blog.html" class="block text-gray-700 hover:text-fuchsia-600">Blog</a>
+                <a href="contact.html" class="block text-gray-700 hover:text-fuchsia-600">Contact</a>
+                <a href="portal.html" class="block w-full text-center px-4 py-2 mt-2 rounded-full bg-fuchsia-600 text-white hover:bg-fuchsia-700">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="py-16 md:py-24">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <article id="post-container" class="prose lg:prose-xl mx-auto">
+                <!-- Loading state -->
+                <p id="loading-indicator" class="text-center text-gray-500">Loading post...</p>
+                <!-- Content will be injected here -->
+            </article>
+        </div>
+    </main>
+    
+    <!-- Reusable Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <!-- Your full footer code goes here -->
+    </footer>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Your NEW Firebase config for the blog project
+        const firebaseConfig = {
+            apiKey: "AIzaSyBCbPfODmBKeKyQhi_oefTyclY8vfmbOBs",
+            authDomain: "blog-598c4.firebaseapp.com",
+            projectId: "blog-598c4",
+            storageBucket: "blog-598c4.appspot.com",
+            messagingSenderId: "560109856697",
+            appId: "1:560109856697:web:de94b2e6147922880f3868",
+            measurementId: "G-Q4Q6FKSQJ3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const postContainer = document.getElementById('post-container');
+
+        async function fetchPost() {
+            // Get post ID from URL (e.g., blog-post.html?id=DOCUMENT_ID)
+            const params = new URLSearchParams(window.location.search);
+            const postId = params.get('id');
+
+            if (!postId) {
+                postContainer.innerHTML = '<p class="text-center text-red-500">Error: No post ID provided.</p>';
+                return;
+            }
+
+            try {
+                const docRef = doc(db, "posts", postId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const post = docSnap.data();
+                    
+                    // Format the date
+                    const postDate = post.createdAt.toDate().toLocaleDateString('en-US', {
+                        year: 'numeric', month: 'long', day: 'numeric'
+                    });
+
+                    // Update the page title
+                    document.title = `${post.title} - Karma Judiciary`;
+
+                    const postHTML = `
+                        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">${post.title}</h1>
+                        <div class="flex items-center text-gray-500 mb-8">
+                            <span>By Karma Judiciary Team &middot; ${postDate}</span>
+                        </div>
+                        <img src="${post.imageUrl || 'https://placehold.co/1200x600/d1d5db/374151?text=Image'}" alt="Feature Image" class="rounded-xl shadow-lg mb-8 w-full">
+                        <div>${post.content}</div>
+                    `;
+                    postContainer.innerHTML = postHTML;
+
+                } else {
+                    postContainer.innerHTML = '<p class="text-center text-red-500">Error: Post not found.</p>';
+                }
+            } catch (error) {
+                console.error("Error fetching document:", error);
+                postContainer.innerHTML = '<p class="text-center text-red-500">Error loading post.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchPost();
+            feather.replace();
+        });
+    </script>
+    <script>
+        // Mobile Menu Toggle Script
+        const menuToggleBtn = document.getElementById('menuToggleBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuToggleBtn) {
+            menuToggleBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
+

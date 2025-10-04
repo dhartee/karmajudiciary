@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Blog CMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .form-input { @apply w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500 transition; }
+        #editor { min-height: 300px; outline: none; padding: 1rem; font-size: 1rem; line-height: 1.75; }
+        .editor-toolbar button { @apply px-3 py-2 bg-gray-100 rounded-md hover:bg-fuchsia-100 hover:text-fuchsia-600 transition-colors duration-200; }
+        /* Style for the status toggle switch */
+        .toggle-checkbox:checked { right: 0; border-color: #4ade80; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #4ade80; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Login View -->
+    <div id="login-view" class="flex items-center justify-center min-h-screen p-4">
+        <!-- Login form remains the same -->
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-fuchsia-600">Writer Login</h1>
+                <p class="text-gray-500">Access the blog admin panel</p>
+            </div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" class="form-input mt-1" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" class="form-input mt-1" required>
+                </div>
+                <button type="submit" class="w-full py-3 font-semibold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 transition">Sign In</button>
+                <p id="login-error" class="text-red-500 text-sm text-center hidden"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard View -->
+    <div id="dashboard-view" class="hidden">
+        <header class="bg-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-fuchsia-600">Admin Dashboard</h1>
+                <div class="flex items-center space-x-4">
+                    <button id="new-post-btn" class="px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 flex items-center">
+                        <i data-feather="plus" class="w-4 h-4 mr-2"></i> New Post
+                    </button>
+                    <button id="sign-out-btn" class="px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600">Sign Out</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            
+            <!-- View 1: List of all posts -->
+            <div id="post-list-view">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-3xl font-bold text-gray-800">All Posts</h2>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="border-b-2 border-gray-200">
+                                    <th class="py-3 px-4">Title</th>
+                                    <th class="py-3 px-4">Category</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="posts-table-body">
+                                <!-- Posts will be rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View 2: Post Editor (hidden by default) -->
+            <div id="editor-view" class="hidden">
+                 <div class="flex justify-between items-center mb-6">
+                    <h2 id="editor-heading" class="text-3xl font-bold text-gray-800">Create New Post</h2>
+                    <button id="back-to-list-btn" class="text-sm text-gray-600 hover:text-fuchsia-600 flex items-center">
+                        <i data-feather="arrow-left" class="w-4 h-4 mr-2"></i> Back to All Posts
+                    </button>
+                </div>
+                <form id="post-form" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg space-y-6">
+                    <input type="hidden" id="post-id">
+                    <div>
+                        <label for="post-title" class="block text-lg font-semibold text-gray-800 mb-2">Post Title</label>
+                        <input type="text" id="post-title" class="form-input text-2xl font-bold" required>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div>
+                            <label for="post-category" class="block text-lg font-semibold text-gray-800 mb-2">Category</label>
+                            <input type="text" id="post-category" class="form-input" required>
+                        </div>
+                        <div>
+                            <label for="post-image-url" class="block text-lg font-semibold text-gray-800 mb-2">Feature Image URL</label>
+                            <input type="url" id="post-image-url" class="form-input">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-lg font-semibold text-gray-800 mb-2">Content</label>
+                        <div class="border-2 border-gray-200 rounded-lg">
+                            <div class="editor-toolbar flex items-center space-x-2 p-2 border-b-2 border-gray-200 bg-gray-50 rounded-t-lg">
+                                <button type="button" data-command="bold"><i data-feather="bold"></i></button>
+                                <button type="button" data-command="italic"><i data-feather="italic"></i></button>
+                                <button type="button" data-command="underline"><i data-feather="underline"></i></button>
+                                <button type="button" data-command="formatBlock" data-value="H2">H2</button>
+                                <button type="button" data-command="formatBlock" data-value="H3">H3</button>
+                                <button type="button" data-command="formatBlock" data-value="P">P</button>
+                            </div>
+                            <div id="editor" contenteditable="true"></div>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 text-lg font-bold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700">Save Post</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBCbPfODmBKeKyQhi_oefTyclY8vfmbOBs",
+            authDomain: "blog-598c4.firebaseapp.com",
+            projectId: "blog-598c4",
+            storageBucket: "blog-598c4.appspot.com",
+            messagingSenderId: "560109856697",
+            appId: "1:560109856697:web:de94b2e6147922880f3868",
+            measurementId: "G-Q4Q6FKSQJ3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- DOM Elements ---
+        const loginView = document.getElementById('login-view');
+        const dashboardView = document.getElementById('dashboard-view');
+        const postListView = document.getElementById('post-list-view');
+        const editorView = document.getElementById('editor-view');
+        // ... (other elements)
+        const loginForm = document.getElementById('login-form');
+        const signOutBtn = document.getElementById('sign-out-btn');
+        const newPostBtn = document.getElementById('new-post-btn');
+        const backToListBtn = document.getElementById('back-to-list-btn');
+        const postsTableBody = document.getElementById('posts-table-body');
+        const postForm = document.getElementById('post-form');
+        const editor = document.getElementById('editor');
+        const editorHeading = document.getElementById('editor-heading');
+        const postIdInput = document.getElementById('post-id');
+
+
+        // --- View Switching Logic ---
+        function showView(view) {
+            postListView.classList.add('hidden');
+            editorView.classList.add('hidden');
+            view.classList.remove('hidden');
+        }
+
+        newPostBtn.addEventListener('click', () => {
+            postForm.reset();
+            editor.innerHTML = '';
+            postIdInput.value = '';
+            editorHeading.textContent = 'Create New Post';
+            showView(editorView);
+        });
+        backToListBtn.addEventListener('click', () => showView(postListView));
+
+
+        // --- Authentication Logic ---
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                loginView.classList.add('hidden');
+                dashboardView.classList.remove('hidden');
+                renderPosts();
+                showView(postListView);
+            } else {
+                dashboardView.classList.add('hidden');
+                loginView.classList.remove('hidden');
+            }
+        });
+
+        loginForm.addEventListener('submit', async (e) => {
+             e.preventDefault();
+             try { await signInWithEmailAndPassword(auth, loginForm.email.value, loginForm.password.value); } catch (error) { alert(error.message); }
+        });
+
+        signOutBtn.addEventListener('click', () => signOut(auth));
+
+
+        // --- CRUD Logic (Create, Read, Update, Delete) ---
+        async function renderPosts() {
+            postsTableBody.innerHTML = '<tr><td colspan="4" class="text-center p-4">Loading posts...</td></tr>';
+            const postsQuery = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(postsQuery);
+
+            postsTableBody.innerHTML = '';
+            if(querySnapshot.empty) {
+                postsTableBody.innerHTML = '<tr><td colspan="4" class="text-center p-4">No posts found. Create one!</td></tr>';
+            }
+
+            querySnapshot.forEach(doc => {
+                const post = doc.data();
+                const postRow = document.createElement('tr');
+                postRow.className = 'border-b border-gray-200 hover:bg-gray-50';
+                postRow.innerHTML = `
+                    <td class="py-3 px-4 font-semibold">${post.title}</td>
+                    <td class="py-3 px-4 text-gray-600">${post.category}</td>
+                    <td class="py-3 px-4">
+                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" data-id="${doc.id}" ${post.status === 'published' ? 'checked' : ''}/>
+                            <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 flex items-center space-x-2">
+                        <button class="edit-btn p-2 text-blue-500 hover:bg-blue-100 rounded-full" data-id="${doc.id}"><i data-feather="edit-2" class="w-4 h-4"></i></button>
+                        <button class="delete-btn p-2 text-red-500 hover:bg-red-100 rounded-full" data-id="${doc.id}"><i data-feather="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                `;
+                postsTableBody.appendChild(postRow);
+            });
+            feather.replace();
+        }
+
+        // Event delegation for table buttons
+        postsTableBody.addEventListener('click', async e => {
+            const target = e.target;
+            const editBtn = target.closest('.edit-btn');
+            const deleteBtn = target.closest('.delete-btn');
+            const toggle = target.closest('.toggle-checkbox');
+
+            if (editBtn) {
+                const id = editBtn.dataset.id;
+                const docRef = doc(db, "posts", id);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const post = docSnap.data();
+                    postForm['post-title'].value = post.title;
+                    postForm['post-category'].value = post.category;
+                    postForm['post-image-url'].value = post.imageUrl;
+                    editor.innerHTML = post.content;
+                    postIdInput.value = id;
+                    editorHeading.textContent = 'Edit Post';
+                    showView(editorView);
+                }
+            }
+
+            if (deleteBtn) {
+                const id = deleteBtn.dataset.id;
+                if (confirm("Are you sure you want to delete this post?")) {
+                    await deleteDoc(doc(db, "posts", id));
+                    renderPosts();
+                }
+            }
+
+            if (toggle) {
+                const id = toggle.dataset.id;
+                const newStatus = toggle.checked ? 'published' : 'draft';
+                await updateDoc(doc(db, "posts", id), { status: newStatus });
+            }
+        });
+        
+        // Form submission (handles both create and update)
+        postForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            const id = postIdInput.value;
+            const postData = {
+                title: postForm['post-title'].value,
+                category: postForm['post-category'].value,
+                imageUrl: postForm['post-image-url'].value,
+                content: editor.innerHTML,
+                status: 'published', // Default to published
+                updatedAt: serverTimestamp()
+            };
+
+            if (id) { // Update existing post
+                await updateDoc(doc(db, "posts", id), postData);
+            } else { // Create new post
+                postData.createdAt = serverTimestamp();
+                await addDoc(collection(db, "posts"), postData);
+            }
+            
+            postForm.reset();
+            editor.innerHTML = '';
+            showView(postListView);
+            renderPosts();
+        });
+
+
+        // --- Rich Text Editor Logic ---
+        const toolbar = document.querySelector('.editor-toolbar');
+        toolbar.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button) return;
+            document.execCommand(button.dataset.command, false, button.dataset.value || null);
+            editor.focus();
+        });
+
+        feather.replace();
+    </script>
+</body>
+</html>
+```
