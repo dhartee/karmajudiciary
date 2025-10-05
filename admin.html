@@ -21,7 +21,7 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- Login View (No changes needed) -->
+    <!-- Login View -->
     <div id="login-view" class="flex items-center justify-center min-h-screen p-4">
         <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg">
             <div class="text-center">
@@ -43,9 +43,10 @@
         </div>
     </div>
 
-    <!-- Main Admin Dashboard (No major HTML changes needed) -->
-    <div id="dashboard-view" x-data="{ activeTab: 'enrollments' }" class="hidden">
-        <div class="flex h-screen bg-gray-100">
+    <!-- Main Admin Dashboard -->
+    <div id="dashboard-view" class="hidden">
+        <!-- ✅ MOVED x-data to the correct parent element -->
+        <div class="flex h-screen bg-gray-100" x-data="{ activeTab: 'enrollments' }">
             <!-- Sidebar -->
             <aside class="w-64 bg-white shadow-md flex-shrink-0">
                 <div class="p-4 border-b">
@@ -96,8 +97,7 @@
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // ✅ --- Single Firebase Configuration ---
-        // Using the blog project for EVERYTHING, including enrollments, contacts, etc.
+        // Using the blog project for EVERYTHING
         const firebaseConfig = {
             apiKey: "AIzaSyBCbPfODmBKeKyQhi_oefTyclY8vfmbOBs",
             authDomain: "blog-598c4.firebaseapp.com",
@@ -107,12 +107,11 @@
             appId: "1:560109856697:web:de94b2e6147922880f3868"
         };
         
-        // --- Initialize a Single Firebase App ---
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app); // Use this one 'db' for everything.
+        const db = getFirestore(app);
 
-        // --- Authentication (No changes needed) ---
+        // --- Authentication ---
         const loginView = document.getElementById('login-view');
         const dashboardView = document.getElementById('dashboard-view');
         const loginForm = document.getElementById('login-form');
@@ -120,13 +119,14 @@
 
         onAuthStateChanged(auth, user => {
             if (user) {
-                loginView.classList.add('hidden');
-                dashboardView.classList.remove('hidden');
+                // ✅ Added null checks for robustness
+                if (loginView) loginView.classList.add('hidden');
+                if (dashboardView) dashboardView.classList.remove('hidden');
                 feather.replace();
                 loadEnrollments(); // Load initial tab data
             } else {
-                dashboardView.classList.add('hidden');
-                loginView.classList.remove('hidden');
+                if (dashboardView) dashboardView.classList.add('hidden');
+                if (loginView) loginView.classList.remove('hidden');
             }
         });
         loginForm.addEventListener('submit', e => {
@@ -141,18 +141,16 @@
             Alpine.watch('activeTab', value => {
                 if (value === 'enrollments') loadEnrollments();
                 if (value === 'contacts') loadContacts();
-                // Placeholder functions for future features
                 if (value === 'stories') loadPlaceholder('stories-cms-container', 'Manage Student Stories');
                 if (value === 'courses') loadPlaceholder('courses-cms-container', 'Manage Courses');
                 if (value === 'blog') loadPlaceholder('blog-cms-container', 'Manage Blog Posts');
             });
         });
 
-        // --- Data Loading Functions (Now using the single 'db' instance) ---
+        // --- Data Loading Functions ---
         async function loadEnrollments() {
             const container = document.getElementById('enrollments-table-container');
             container.innerHTML = `<p>Loading enrollments...</p>`;
-            // ✅ Using the single 'db' instance now
             const querySnapshot = await getDocs(query(collection(db, "enrollments"), orderBy("submittedAt", "desc")));
             let tableHTML = `<table class="w-full text-left"><thead><tr class="border-b-2">
                 <th class="py-3 px-4">Name</th><th class="py-3 px-4">Email</th><th class="py-3 px-4">Phone</th><th class="py-3 px-4">Course</th></tr></thead><tbody>`;
@@ -167,7 +165,6 @@
         async function loadContacts() {
             const container = document.getElementById('contacts-table-container');
             container.innerHTML = `<p>Loading messages...</p>`;
-            // ✅ Using the single 'db' instance now
             const querySnapshot = await getDocs(query(collection(db, "contacts")));
             let tableHTML = `<table class="w-full text-left"><thead><tr class="border-b-2">
                 <th class="py-3 px-4">Name</th><th class="py-3 px-4">Email</th><th class="py-3 px-4">Subject</th><th class="py-3 px-4">Message</th></tr></thead><tbody>`;
@@ -179,7 +176,6 @@
             container.innerHTML = tableHTML;
         }
         
-        // Placeholder for unimplemented features
         function loadPlaceholder(containerId, title) {
             const container = document.getElementById(containerId);
             container.innerHTML = `<h2 class="text-3xl font-bold text-gray-800 mb-6">${title}</h2><p class="mt-4">This feature is coming soon.</p>`;
