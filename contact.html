@@ -62,7 +62,8 @@
                 <!-- Contact Form -->
                 <div class="bg-white p-8 md:p-10 rounded-2xl shadow-lg" data-aos="fade-right">
                     <h2 class="text-2xl font-bold text-fuchsia-600 mb-6">Send Us a Message</h2>
-                    <form action="#" method="POST" class="space-y-6">
+                    <!-- ✅ ADDED ID TO FORM -->
+                    <form id="contact-form" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
@@ -107,10 +108,55 @@
 
     <!-- Reusable Footer -->
     <footer class="bg-gray-900 text-white py-12">
-        <!-- Footer content can be pasted here from your other pages -->
+        <!-- Footer content -->
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- ✅ ADDED FIREBASE SCRIPT SECTION -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Using the same consolidated Firebase project for everything
+        const firebaseConfig = {
+            apiKey: "AIzaSyBCbPfODmBKeKyQhi_oefTyclY8vfmbOBs",
+            authDomain: "blog-598c4.firebaseapp.com",
+            projectId: "blog-598c4",
+            storageBucket: "blog-598c4.appspot.com",
+            messagingSenderId: "560109856697",
+            appId: "1:560109856697:web:de94b2e6147922880f3868",
+            measurementId: "G-Q4Q6FKSQJ3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const contactForm = document.getElementById('contact-form');
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const contactData = {
+                fullName: formData.get('fullName'),
+                email: formData.get('email'),
+                subject: formData.get('subject'),
+                message: formData.get('message'),
+                submittedAt: new Date()
+            };
+
+            try {
+                // Save to a "contacts" collection
+                await addDoc(collection(db, "contacts"), contactData);
+                alert('Success! Your message has been sent.');
+                contactForm.reset();
+            } catch (error) {
+                console.error("Error sending message: ", error);
+                alert('Error: Could not send message. Please try again.');
+            }
+        });
+    </script>
+    
     <script>
         feather.replace();
         AOS.init({ once: true, duration: 800 });
@@ -125,3 +171,4 @@
     </script>
 </body>
 </html>
+
